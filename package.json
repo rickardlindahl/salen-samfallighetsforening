@@ -17,12 +17,6 @@
 		"postinstall": "remix setup node",
 		"typecheck": "tsc -b"
 	},
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx}": [
-			"eslint --cache --fix",
-			"prettier --write"
-		]
-	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.100.0",
 		"@aws-sdk/lib-storage": "^3.100.0",
