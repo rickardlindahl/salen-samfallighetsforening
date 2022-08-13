@@ -14,7 +14,7 @@ npx create-remix --template ilangorajagopal/synthwave-stack
 -   [PlanetScale Database](https://planetscale.com)
 -   [GitHub Actions](https://github.com/features/actions) for deploy on merge to production and staging environments
 -   Database ORM with [Prisma](https://prisma.io)
--   Magic Links and Google Auth with [remix-auth](https://github.com/sergiodxa/remix-auth/)
+-   Magic Links with [remix-auth](https://github.com/sergiodxa/remix-auth/)
 -   Health check API route
 -   Upload API with AWS S3
 -   Transactional emails with [SendGrid](https://sendgrid.com/)

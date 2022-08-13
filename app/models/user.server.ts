@@ -7,13 +7,13 @@ export async function getUserById(id: string) {
 
 // @ts-ignore
 export async function findOrCreate(profile, provider) {
-	let email = provider === 'google' ? profile.emails[0].value : profile.email
+	let email = profile.email
 	let user = await getUserByEmail(email)
 	if (user) {
 		return user
 	} else {
-		const image = provider === 'google' ? profile.photos[0].value : ''
-		const name = provider === 'google' ? profile.displayName : ''
+		const image = ''
+		const name = ''
 		const newUser = await createUser({ email, image, name, provider })
 		return newUser
 	}
