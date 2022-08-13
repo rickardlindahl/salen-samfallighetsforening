@@ -19,4 +19,5 @@ model User {
   emailVerified DateTime? @default(now())
   image         String?
   role          String?   @default("user")
+  password      String?
 }
