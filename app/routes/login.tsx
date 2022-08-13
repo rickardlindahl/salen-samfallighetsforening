@@ -4,7 +4,6 @@ import { Form, useLoaderData } from '@remix-run/react'
 import { auth } from '~/services/auth.server'
 import { sessionStorage } from '~/services/session.server'
 import { Container } from '~/routes/index'
-import { FaTwitter } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -79,14 +78,6 @@ export default function () {
 					<button className='flex h-12 w-full items-center justify-center space-x-2 rounded-md bg-gray-800'>
 						<FcGoogle />
 						<span>Sign In with Google</span>
-					</button>
-				</div>
-			</Form>
-			<Form action='/auth/twitter' method='post'>
-				<div className='flex w-96 flex-col items-center justify-center space-y-4'>
-					<button className='flex h-12 w-full items-center justify-center space-x-2 rounded-md bg-gray-800'>
-						<FaTwitter className='text-[#1D9BF0]' />
-						<span>Sign In with Twitter</span>
 					</button>
 				</div>
 			</Form>

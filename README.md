@@ -10,22 +10,22 @@ npx create-remix --template ilangorajagopal/synthwave-stack
 
 ## What's in the stack
 
-- [Vercel deployment](https://vercel.com)
-- [PlanetScale Database](https://planetscale.com)
-- [GitHub Actions](https://github.com/features/actions) for deploy on merge to production and staging environments
-- Database ORM with [Prisma](https://prisma.io)
-- Magic Links, Google and Twitter Auth with [remix-auth](https://github.com/sergiodxa/remix-auth/)
-- Health check API route
-- Upload API with AWS S3
-- Transactional emails with [SendGrid](https://sendgrid.com/)
-- UI with [Radix UI](https://radix-ui.com)
-- Styling with [TailwindCSS](https://tailwindcss.com)
-- Code formatting with [Prettier](https://prettier.io)
-- Linting with [ESLint](https://eslint.org)
-- Static Types with [TypeScript](https://typescriptlang.org)
-- End-to-end testing with [Cypress](https://cypress.io) (Coming Soon)
-- Local third party request mocking with [MSW](https://mswjs.io) (Coming Soon)
-- Unit testing with [Vitest](https://vitest.dev) and [Testing Library](https://testing-library.com) (Coming Soon)
+-   [Vercel deployment](https://vercel.com)
+-   [PlanetScale Database](https://planetscale.com)
+-   [GitHub Actions](https://github.com/features/actions) for deploy on merge to production and staging environments
+-   Database ORM with [Prisma](https://prisma.io)
+-   Magic Links and Google Auth with [remix-auth](https://github.com/sergiodxa/remix-auth/)
+-   Health check API route
+-   Upload API with AWS S3
+-   Transactional emails with [SendGrid](https://sendgrid.com/)
+-   UI with [Radix UI](https://radix-ui.com)
+-   Styling with [TailwindCSS](https://tailwindcss.com)
+-   Code formatting with [Prettier](https://prettier.io)
+-   Linting with [ESLint](https://eslint.org)
+-   Static Types with [TypeScript](https://typescriptlang.org)
+-   End-to-end testing with [Cypress](https://cypress.io) (Coming Soon)
+-   Local third party request mocking with [MSW](https://mswjs.io) (Coming Soon)
+-   Unit testing with [Vitest](https://vitest.dev) and [Testing Library](https://testing-library.com) (Coming Soon)
 
 Not a fan of bits of the stack? Fork it, change it, and use `npx create-remix --template your/repo`! Make it your own.
 
@@ -87,7 +87,7 @@ To run these tests in development, run `npm run test:e2e:dev` which will start t
 We have a utility for testing authenticated features without having to go through the login flow:
 
 ```ts
-cy.login();
+cy.login()
 // you are now logged in as a new user
 ```
 
@@ -95,8 +95,8 @@ We also have a utility to auto-delete the user at the end of your test. Just mak
 
 ```ts
 afterEach(() => {
-	cy.cleanupUser();
-});
+	cy.cleanupUser()
+})
 ```
 
 That way, we can keep your local db clean and keep your tests isolated from one another.
