@@ -15,6 +15,7 @@ node_modules
 app/tailwind.css
 api/index.js
 api/index.js.map
+api/_assets/
 
 # environment variables
 .env
