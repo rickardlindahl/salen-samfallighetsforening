@@ -18,3 +18,18 @@ export function createProtectedRouter() {
     });
   });
 }
+
+export function createAdminRouter() {
+  return createRouter().middleware(({ ctx, next }) => {
+    if (!ctx.session || ctx.session.user?.role !== "admin") {
+      throw new trpc.TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next({
+      ctx: {
+        ...ctx,
+        // infers that `session` is non-nullable to downstream resolvers
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    });
+  });
+}
