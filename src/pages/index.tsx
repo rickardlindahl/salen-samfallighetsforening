@@ -1,15 +1,12 @@
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
+import { clsx } from "clsx";
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { trpc } from "../utils/trpc";
-
-type TechnologyCardProps = {
-  name: string;
-  description: string;
-  documentation: string;
-};
+import Link from "next/link";
 
 const Home: NextPage = () => {
-  const { data } = trpc.useQuery(["auth.getSession"], { retry: false });
+  const { data: session, status } = useSession();
 
   return (
     <>
@@ -19,59 +16,37 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          Create <span className="text-purple-300">T3</span> App
-        </h1>
-        <p className="text-2xl text-gray-700">This stack uses:</p>
-        <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3">
-          <TechnologyCard
-            name="NextJS"
-            description="The React framework for production"
-            documentation="https://nextjs.org/"
-          />
-          <TechnologyCard
-            name="TypeScript"
-            description="Strongly typed programming language that builds on JavaScript, giving you better tooling at any scale"
-            documentation="https://www.typescriptlang.org/"
-          />
-          <TechnologyCard
-            name="TailwindCSS"
-            description="Rapidly build modern websites without ever leaving your HTML"
-            documentation="https://tailwindcss.com/"
-          />
-          <TechnologyCard
-            name="tRPC"
-            description="End-to-end typesafe APIs made easy"
-            documentation="https://trpc.io/"
-          />
-        </div>
-        <div className="pt-6 text-2xl text-blue-500 flex justify-center items-center w-full">
-          {data ? <p>{data.user.email}</p> : <p>Loading..</p>}
+      <main className="container mx-auto flex flex-col items-center justify-center overflow-visible p-4">
+        <div className="hero">
+          <div className="hero-content break-normal rounded-lg bg-base-100 text-center sm:p-8 md:p-16">
+            <div className="w-full">
+              <h1 className="text-4xl font-bold">Salen</h1>
+              <h2 className="text-xl font-bold">Samfällighetsförening</h2>
+              <p className="py-6">Välkommen till Salen Samfällighetsförening, Tomtebo, Umeå.</p>
+              <div className={clsx({ "animate-pulse": status === "loading", "h-12": status !== "unauthenticated" })}>
+                {status === "loading" && <div className="rounded bg-slate-200" />}
+
+                {status === "unauthenticated" && (
+                  <Link href="/auth/signin">
+                    <a className="btn btn-primary w-full md:w-2/4">
+                      <ArrowRightOnRectangleIcon className="h-6 w-6" />
+                      Logga in
+                    </a>
+                  </Link>
+                )}
+
+                {status === "authenticated" && (
+                  <div className="flex flex-row items-center justify-center space-x-1">
+                    <div>Inloggad som</div>
+                    <div className="rounded-lg bg-slate-200 p-2 text-xs">{session.user?.email}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </>
-  );
-};
-
-const TechnologyCard = ({
-  name,
-  description,
-  documentation,
-}: TechnologyCardProps) => {
-  return (
-    <section className="flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
-      <h2 className="text-lg text-gray-700">{name}</h2>
-      <p className="text-sm text-gray-600">{description}</p>
-      <a
-        className="mt-3 text-sm underline text-violet-500 decoration-dotted underline-offset-2"
-        href={documentation}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Documentation
-      </a>
-    </section>
   );
 };
 

@@ -5,17 +5,15 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
+import { Layout } from "../components/layout";
 
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
-  return (
-    <SessionProvider session={session}>
+const MyApp: AppType = ({ Component, pageProps: { session, ...pageProps } }) => (
+  <SessionProvider session={session}>
+    <Layout>
       <Component {...pageProps} />
-    </SessionProvider>
-  );
-};
+    </Layout>
+  </SessionProvider>
+);
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url

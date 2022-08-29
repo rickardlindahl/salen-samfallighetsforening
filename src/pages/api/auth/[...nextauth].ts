@@ -86,8 +86,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) throw new Error("A user with that email does not exist");
-        if (!user.password)
-          throw new Error("The user does not have a password");
+        if (!user.password) throw new Error("The user does not have a password");
 
         const isCorrectPassword = await verifyPassword(password, user.password);
         if (!isCorrectPassword) {
