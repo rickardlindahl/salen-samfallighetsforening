@@ -10,7 +10,7 @@ export function NavigationMenu(
         <Link href="/news">
           <a>
             <NewspaperIcon className="h-6 w-6" />
-            Nyheter
+            <span className="link font-bold">Inlägg</span>
           </a>
         </Link>
       </li>
@@ -18,7 +18,7 @@ export function NavigationMenu(
         <Link href="/documents">
           <a>
             <DocumentTextIcon className="h-6 w-6" />
-            Dokument
+            <span className="link font-bold">Dokument</span>
           </a>
         </Link>
       </li>
@@ -26,7 +26,7 @@ export function NavigationMenu(
         <Link href="/address-list">
           <a>
             <UsersIcon className="h-6 w-6" />
-            Adresslista
+            <span className="link font-bold">Adresslista</span>
           </a>
         </Link>
       </li>
