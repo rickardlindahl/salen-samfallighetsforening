@@ -14,7 +14,7 @@ const Home: NextPage = () => (
     </Head>
 
     <div className="fixed -z-10 h-screen w-screen  animate-saturation overflow-hidden">
-      <Image src={img} alt="Mountains" layout="fill" objectFit="cover" quality={100} />
+      <Image src={img} alt="Mountains" layout="fill" objectFit="cover" quality={50} />
     </div>
 
     <div className="hero h-full">
