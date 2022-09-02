@@ -7,7 +7,7 @@ export function NavigationMenu(
   return (
     <ul {...props}>
       <li role="menu-item">
-        <Link href="/news">
+        <Link href="/posts">
           <a>
             <NewspaperIcon className="h-6 w-6" />
             <span className="link font-bold">Inlägg</span>

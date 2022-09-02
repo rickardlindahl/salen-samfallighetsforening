@@ -1,11 +1,11 @@
 // src/pages/_app.tsx
 import { withTRPC } from "@trpc/next";
-import type { AppRouter } from "../server/router";
+import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
-import { SessionProvider } from "next-auth/react";
-import "../styles/globals.css";
 import { Layout } from "../components/layout";
+import type { AppRouter } from "../server/router";
+import "../styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps: { session, ...pageProps } }) => (
   <SessionProvider session={session}>
@@ -35,7 +35,9 @@ export default withTRPC<AppRouter>({
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
-      // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      queryClientConfig: {
+        defaultOptions: { queries: { staleTime: 60 * 1000, refetchOnWindowFocus: false, refetchOnMount: false } },
+      },
     };
   },
   /**

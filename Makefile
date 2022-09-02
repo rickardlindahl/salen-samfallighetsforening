@@ -1,4 +1,5 @@
 dev:
 	tmux \
-    new-session  'npm run db:connect' \; \
-    split-window 'npm run dev' \;
+    new-session  'npm run dev' \; \
+    split-window 'npm run db:connect:shadow' \; \
+    split-window 'npm run db:connect' \;
