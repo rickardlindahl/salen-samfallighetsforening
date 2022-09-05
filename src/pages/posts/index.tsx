@@ -1,12 +1,38 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession as getServerSession } from "next-auth";
 import Head from "next/head";
-import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
 import { authOptions } from "../api/auth/[...nextauth]";
 
+const MINIMUM_ACTIVITY_TIMEOUT = 850;
+
+type CreatePostFormValues = {
+  csrfToken: string;
+  title: string;
+  body: string;
+};
+
 const Posts: NextPage = () => {
   const { data: posts, error, isLoading } = trpc.useQuery(["posts.getPosts"]);
+
+  const [isSubmitting, setSubmitting] = useState(false);
+  const { register, handleSubmit } = useForm<CreatePostFormValues>();
+  const createPost = trpc.useMutation(["posts.createPost"]);
+
+  const onSubmit = async (data: CreatePostFormValues) => {
+    setSubmitting(true);
+    createPost.mutate(data);
+    try {
+      setTimeout(() => {
+        setSubmitting(false);
+      }, MINIMUM_ACTIVITY_TIMEOUT);
+    } catch (error) {
+      console.error(error);
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -33,9 +59,51 @@ const Posts: NextPage = () => {
             ))}
           </>
         )}
-        <Link href="/posts/create">
-          <a className="btn">Skapa nytt inlägg</a>
-        </Link>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <!-- The button to open modal --> */}
+          <label htmlFor="create-post-modal" className="modal-button btn">
+            Skapa inlägg
+          </label>
+
+          {/* <!-- Put this part before </body> tag --> */}
+          <input type="checkbox" id="create-post-modal" className="modal-toggle" />
+          <div className="modal">
+            <div className="modal-box relative">
+              <label htmlFor="create-post-modal" className="btn btn-circle btn-sm absolute right-2 top-2">
+                ✕
+              </label>
+              <h3 className="text-lg font-bold">Skapa inlägg</h3>
+              <div className="p-4">
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Rubrik</span>
+                  </label>
+                  <input
+                    required
+                    type="title"
+                    placeholder="Ange en rubrik"
+                    className="input input-bordered"
+                    {...register("title")}
+                  />
+                </div>
+                <div className="form-control mb-4">
+                  <label className="label">
+                    <span className="label-text">Text</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Skriv din text här..."
+                    className="input input-bordered"
+                    required
+                    {...register("body")}
+                  />
+                </div>
+                <button className="btn-primay btn">Skapa inlägg</button>
+              </div>
+            </div>
+          </div>
+        </form>
       </main>
     </>
   );

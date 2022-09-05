@@ -1,8 +1,7 @@
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 import { GetServerSidePropsContext } from "next";
-import { getSession, getCsrfToken, signIn } from "next-auth/react";
+import { getCsrfToken, getSession, signIn } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
 

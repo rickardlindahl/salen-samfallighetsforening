@@ -6,7 +6,7 @@ export function NavigationMenu(
 ) {
   return (
     <ul {...props}>
-      <li role="menu-item">
+      <li>
         <Link href="/posts">
           <a>
             <NewspaperIcon className="h-6 w-6" />
@@ -14,7 +14,7 @@ export function NavigationMenu(
           </a>
         </Link>
       </li>
-      <li role="menu-item">
+      <li>
         <Link href="/documents">
           <a>
             <DocumentTextIcon className="h-6 w-6" />
@@ -22,7 +22,7 @@ export function NavigationMenu(
           </a>
         </Link>
       </li>
-      <li role="menu-item">
+      <li>
         <Link href="/address-list">
           <a>
             <UsersIcon className="h-6 w-6" />
