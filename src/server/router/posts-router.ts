@@ -1,36 +1,39 @@
 import { z } from "zod";
-import { createProtectedRouter } from "./protected-router";
+import { t } from "../trpc";
+import { isAuthed } from "./middlewares";
 
-export const postsRouter = createProtectedRouter()
-  .query("getPosts", {
-    async resolve({ ctx }) {
-      const posts = await ctx.prisma.post.findMany({
-        select: {
-          id: true,
-          title: true,
-          body: true,
-          createdAt: true,
-          user: {
-            select: {
-              id: true,
-              email: true,
-              name: true,
-            },
+const authedProcedure = t.procedure.use(isAuthed);
+
+export const postsRouter = t.router({
+  getPosts: authedProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.prisma.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        body: true,
+        createdAt: true,
+        user: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-      return posts || [];
-    },
-  })
-  .mutation("createPost", {
-    input: z.object({
-      title: z.string(),
-      body: z.string(),
-    }),
-    async resolve({ ctx, input }) {
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return posts || [];
+  }),
+  createPost: authedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        body: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const post = await ctx.prisma.post.create({
         data: {
           title: input.title,
@@ -40,5 +43,5 @@ export const postsRouter = createProtectedRouter()
       });
 
       return post;
-    },
-  });
+    }),
+});

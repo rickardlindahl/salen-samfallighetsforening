@@ -3,7 +3,7 @@ import { getSession } from "../../lib/auth/session";
 import { trpc } from "../../utils/trpc";
 
 function Admin() {
-  const usersQuery = trpc.useQuery(["admin.users"]);
+  const usersQuery = trpc.admin.users.useQuery();
 
   if (usersQuery.isLoading) {
     return <div>loading...</div>;

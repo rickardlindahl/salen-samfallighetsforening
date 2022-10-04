@@ -1,12 +1,9 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession as getServerSession } from "next-auth";
 import Head from "next/head";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
 import { authOptions } from "../api/auth/[...nextauth]";
-
-const MINIMUM_ACTIVITY_TIMEOUT = 850;
 
 type CreatePostFormValues = {
   csrfToken: string;
@@ -15,23 +12,13 @@ type CreatePostFormValues = {
 };
 
 const Posts: NextPage = () => {
-  const { data: posts, error, isLoading } = trpc.useQuery(["posts.getPosts"]);
+  const { data: posts, error, isLoading } = trpc.posts.getPosts.useQuery();
 
-  const [isSubmitting, setSubmitting] = useState(false);
   const { register, handleSubmit } = useForm<CreatePostFormValues>();
-  const createPost = trpc.useMutation(["posts.createPost"]);
+  const createPost = trpc.posts.createPost.useMutation();
 
   const onSubmit = async (data: CreatePostFormValues) => {
-    setSubmitting(true);
     createPost.mutate(data);
-    try {
-      setTimeout(() => {
-        setSubmitting(false);
-      }, MINIMUM_ACTIVITY_TIMEOUT);
-    } catch (error) {
-      console.error(error);
-      setSubmitting(false);
-    }
   };
 
   return (
