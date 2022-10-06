@@ -1,9 +1,10 @@
 import * as trpc from "@trpc/server";
+import { TRPC_UNAUTHORIZED_ADMIN_REQUIRED, TRPC_UNAUTHORIZED_USER_REQUIRED } from "../../lib/auth/message";
 import { t } from "../trpc";
 
 export const isAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
-    throw new trpc.TRPCError({ code: "UNAUTHORIZED" });
+    throw new trpc.TRPCError({ code: "UNAUTHORIZED", message: TRPC_UNAUTHORIZED_USER_REQUIRED });
   }
 
   return next({
@@ -17,7 +18,7 @@ export const isAuthed = t.middleware(({ ctx, next }) => {
 
 export const isAdmin = t.middleware(({ ctx, next }) => {
   if (!ctx.session || ctx.session.user?.role !== "admin") {
-    throw new trpc.TRPCError({ code: "UNAUTHORIZED" });
+    throw new trpc.TRPCError({ code: "UNAUTHORIZED", message: TRPC_UNAUTHORIZED_ADMIN_REQUIRED });
   }
 
   return next({

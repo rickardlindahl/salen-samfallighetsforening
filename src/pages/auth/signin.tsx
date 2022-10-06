@@ -1,11 +1,10 @@
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
-import { GetServerSidePropsContext } from "next";
-import { getCsrfToken, getSession, signIn } from "next-auth/react";
+import clsx from "clsx";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-const MINIMUM_ACTIVITY_TIMEOUT = 850;
 
 type LoginFormValues = {
   csrfToken: string;
@@ -15,22 +14,28 @@ type LoginFormValues = {
 
 export default function SignIn({ csrfToken }: { csrfToken: string }) {
   const [isSubmitting, setSubmitting] = React.useState(false);
-
   const { register, handleSubmit } = useForm<LoginFormValues>();
+  const session = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/");
+    }
+  }, [session, router]);
 
   const onSubmit = async (data: LoginFormValues) => {
     setSubmitting(true);
 
     try {
-      signIn("app-login", {
+      const signinResponse = await signIn("app-login", {
         callbackUrl: "/",
         email: data.email,
         password: data.password,
       });
-
-      setTimeout(() => {
+      if (signinResponse?.error || !signinResponse?.ok) {
         setSubmitting(false);
-      }, MINIMUM_ACTIVITY_TIMEOUT);
+      }
     } catch (error) {
       console.error(error);
       setSubmitting(false);
@@ -81,7 +86,10 @@ export default function SignIn({ csrfToken }: { csrfToken: string }) {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="md:2-2/4 btn btn-primary w-full">
+                <button
+                  disabled={isSubmitting}
+                  className={clsx("md:2-2/4 btn btn-primary w-full", { loading: isSubmitting })}
+                >
                   <div className="flex flex-row items-center gap-2">
                     <ArrowRightOnRectangleIcon className="h-6 w-6" />
                     Logga in
@@ -94,20 +102,4 @@ export default function SignIn({ csrfToken }: { csrfToken: string }) {
       </div>
     </>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-
-  if (session) {
-    return { redirect: { permanent: false, destination: "/" } };
-  }
-
-  const csrfToken = await getCsrfToken({ req: context.req });
-
-  return {
-    props: {
-      csrfToken,
-    },
-  };
 }

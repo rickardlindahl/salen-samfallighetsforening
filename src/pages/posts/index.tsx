@@ -1,9 +1,10 @@
-import type { GetServerSideProps, NextPage } from "next";
-import { unstable_getServerSession as getServerSession } from "next-auth";
+import { TRPCClientErrorLike } from "@trpc/client";
+import type { NextPage } from "next";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
+import { useHandleUnauthorizedError } from "../../hooks/useHandleUnauthorizedError";
+import { AppRouter } from "../../server/router";
 import { trpc } from "../../utils/trpc";
-import { authOptions } from "../api/auth/[...nextauth]";
 
 type CreatePostFormValues = {
   csrfToken: string;
@@ -13,6 +14,8 @@ type CreatePostFormValues = {
 
 const Posts: NextPage = () => {
   const { data: posts, error, isLoading } = trpc.posts.getPosts.useQuery();
+
+  useHandleUnauthorizedError(error as TRPCClientErrorLike<AppRouter>);
 
   const { register, handleSubmit } = useForm<CreatePostFormValues>();
   const createPost = trpc.posts.createPost.useMutation();
@@ -97,22 +100,3 @@ const Posts: NextPage = () => {
 };
 
 export default Posts;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (!session) {
-    return {
-      redirect: {
-        statusCode: 307,
-        destination: "/auth/signin",
-      },
-    };
-  }
-
-  return {
-    props: {
-      session,
-    },
-  };
-};

@@ -1,4 +1,4 @@
-import { httpBatchLink } from "@trpc/client";
+import { httpBatchLink, TRPCClientErrorLike } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
 import type { AppRouter } from "../server/router";
@@ -37,7 +37,22 @@ export const trpc = createTRPCNext<AppRouter>({
        * @link https://react-query-v3.tanstack.com/reference/QueryClient
        **/
       queryClientConfig: {
-        defaultOptions: { queries: { staleTime: 60 * 1000, refetchOnWindowFocus: false, refetchOnMount: false } },
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            retry(failureCount, err) {
+              const error = err as TRPCClientErrorLike<AppRouter>;
+
+              if (error.data?.code === "UNAUTHORIZED") {
+                return false;
+              }
+
+              return failureCount < 3;
+            },
+          },
+        },
       },
     };
   },
