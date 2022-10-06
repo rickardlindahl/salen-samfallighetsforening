@@ -1,11 +1,14 @@
-import { GetServerSidePropsContext } from "next";
-import { getSession } from "../../lib/auth/session";
+import { TRPCClientErrorLike } from "@trpc/client";
+import { useHandleUnauthorizedError } from "../../hooks/useHandleUnauthorizedError";
+import { AppRouter } from "../../server/router";
 import { trpc } from "../../utils/trpc";
 
 function Admin() {
-  const usersQuery = trpc.admin.users.useQuery();
+  const { data: users, error, isLoading } = trpc.admin.users.useQuery();
 
-  if (usersQuery.isLoading) {
+  useHandleUnauthorizedError(error as TRPCClientErrorLike<AppRouter>);
+
+  if (isLoading) {
     return <div>loading...</div>;
   }
 
@@ -23,7 +26,7 @@ function Admin() {
             </tr>
           </thead>
           <tbody>
-            {usersQuery.data?.map((user) => (
+            {users?.map((user) => (
               <tr key={user.email}>
                 <td>
                   <div>
@@ -49,15 +52,3 @@ function Admin() {
 }
 
 export default Admin;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-
-  if (!session || session?.user?.role !== "admin") {
-    return { redirect: { permanent: false, destination: "/" } };
-  }
-
-  return {
-    props: { session: session },
-  };
-}
