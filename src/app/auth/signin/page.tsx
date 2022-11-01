@@ -6,15 +6,15 @@ export default function SignInPage() {
   const token = cookies().get("next-auth.session-token");
   const csrfToken = cookies().get("next-auth.csrf-token");
 
-  if (token) {
+  if (token?.value) {
     redirect("/"); // already logged-in
     return;
   }
 
-  if (!csrfToken) {
+  if (!csrfToken?.value) {
     redirect("/"); // no csrf available
     return;
   }
 
-  return <SigninForm csrfToken={csrfToken} />;
+  return <SigninForm csrfToken={csrfToken.value} />;
 }

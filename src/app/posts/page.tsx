@@ -6,7 +6,7 @@ import CreatePostForm from "./create-post-form";
 export default async function Posts() {
   const token = cookies().get("next-auth.session-token");
 
-  if (!token) {
+  if (!token?.value) {
     redirect("/auth/signin");
     return;
   }
