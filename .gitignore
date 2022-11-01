@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 
 .vscode
+
+# Ignore the output of tailwind
+src/app/styles.css

@@ -1,5 +1,6 @@
+"use client";
+
 import { UserIcon } from "@heroicons/react/24/outline";
-import { clsx } from "clsx";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -13,7 +14,7 @@ export function AvatarDropdown() {
 
   return (
     <div className="dropdown-end dropdown">
-      <label tabIndex={0} className={clsx("avatar placeholder btn btn-ghost btn-circle")}>
+      <label tabIndex={0} className={"placeholder btn-ghost btn-circle avatar btn"}>
         <div className="w-10 rounded-full bg-base-content text-base-100">
           {status === "authenticated" && <span className="text-xs">{getInitialsFromName(session?.user?.name)}</span>}
           {status !== "authenticated" && <UserIcon className="h-6 w-6" />}
@@ -26,11 +27,7 @@ export function AvatarDropdown() {
           </li>
         )}
         <li>
-          {status !== "authenticated" && (
-            <Link href="/auth/signin">
-              <a>Logga in</a>
-            </Link>
-          )}
+          {status !== "authenticated" && <Link href="/auth/signin">Logga in</Link>}
           {status === "authenticated" && <a onClick={() => signOut({ redirect: true })}>Logga ut</a>}
         </li>
       </ul>

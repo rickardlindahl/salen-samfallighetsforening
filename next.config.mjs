@@ -13,6 +13,9 @@ function defineNextConfig(config) {
 }
 
 export default defineNextConfig({
+  experimental: {
+    appDir: true,
+  },
   reactStrictMode: true,
   swcMinify: true,
 });

@@ -1,9 +1,31 @@
 import { Session } from "next-auth";
-import { getSession as getNextSession, GetSessionParams } from "next-auth/react";
+import { decode } from "next-auth/jwt";
+import { env } from "../../env/server.mjs";
 
-export async function getSession(options: GetSessionParams): Promise<Session | null> {
-  const session = await getNextSession(options);
+export async function getSession(cookie: string): Promise<Session | null> {
+  const response = await fetch(`${env.NEXTAUTH_URL}/api/auth/session`, {
+    headers: { cookie },
+  });
 
-  // that these are equal are ensured in `[...nextauth]`'s callback
-  return session as Session | null;
+  if (!response?.ok) {
+    return null;
+  }
+
+  const session = await response.json();
+
+  return Object.keys(session).length > 0 ? (session as Session) : null;
+}
+
+export async function isAuth(cookie: string) {
+  if (!cookie) return false;
+
+  const session = await getSession(cookie);
+  return !!session?.user;
+}
+
+export function decodeToken(token: string) {
+  return decode({
+    token,
+    secret: env.NEXTAUTH_SECRET,
+  });
 }
