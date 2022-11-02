@@ -1,7 +1,12 @@
 import { prisma } from "../../../server/db/client";
 
+async function getUsers() {
+  return prisma.user.findMany();
+}
+
 export default async function AdminUsersPage() {
-  const users = await prisma.user.findMany();
+  const users = await getUsers();
+
   return (
     <table className="table w-full">
       <thead>
