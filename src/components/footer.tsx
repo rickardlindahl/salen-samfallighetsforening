@@ -1,6 +1,6 @@
 const supportEmail = "rickard@lindahl.app";
 
-export function Footer() {
+export default function Footer() {
   return (
     <footer className="footer rounded-lg bg-white p-10">
       <div>
