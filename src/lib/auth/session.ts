@@ -2,8 +2,10 @@ import { Session } from "next-auth";
 import { decode } from "next-auth/jwt";
 import { env } from "../../env/server.mjs";
 
+const AUTH_URL = env.VERCEL === "1" ? `https://${env.VERCEL_URL}` : env.NEXTAUTH_URL;
+
 export async function getSession(cookie: string): Promise<Session | null> {
-  const response = await fetch(`${env.NEXTAUTH_URL}/api/auth/session`, {
+  const response = await fetch(`${AUTH_URL}/api/auth/session`, {
     headers: { cookie },
   });
 
