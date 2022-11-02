@@ -1,4 +1,4 @@
-export default async function SigninLayout({ children }: React.PropsWithChildren<Record<never, any>>) {
+export default async function SigninLayout({ children }: React.PropsWithChildren) {
   return (
     <div className="hero h-full">
       <div className="hero-content w-fit rounded-lg bg-base-100 p-8 text-center">

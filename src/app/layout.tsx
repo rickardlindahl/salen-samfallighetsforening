@@ -4,7 +4,7 @@ import SessionProvider from "../components/session-provider.client";
 import { getSession } from "../lib/auth/session";
 import "./styles.css";
 
-export default async function RootLayout({ children }: React.PropsWithChildren<Record<never, any>>) {
+export default async function RootLayout({ children }: React.PropsWithChildren) {
   const session = await getSession(headers().get("cookie") ?? "");
 
   return (

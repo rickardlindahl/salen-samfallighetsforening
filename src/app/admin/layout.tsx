@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function AdminLayout({ children }: React.PropsWithChildren<Record<never, any>>) {
+export default function AdminLayout({ children }: React.PropsWithChildren) {
   return (
     <section className="container mx-auto py-4">
       <h1 className="mb-4">Admin</h1>
