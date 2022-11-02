@@ -3,15 +3,8 @@ import { redirect } from "next/navigation";
 import { prisma } from "../../server/db/client";
 import CreatePostForm from "./create-post-form";
 
-export default async function Posts() {
-  const token = cookies().get("next-auth.session-token");
-
-  if (!token?.value) {
-    redirect("/auth/signin");
-    return;
-  }
-
-  const posts = await prisma.post.findMany({
+async function getPosts() {
+  return prisma.post.findMany({
     select: {
       id: true,
       title: true,
@@ -29,6 +22,17 @@ export default async function Posts() {
       createdAt: "desc",
     },
   });
+}
+
+export default async function Posts() {
+  const token = cookies().get("next-auth.session-token");
+
+  if (!token?.value) {
+    redirect("/auth/signin");
+    return;
+  }
+
+  const posts = await getPosts();
 
   return (
     <>
