@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar } from "./navbar";
+import Navbar from "./navbar";
 import { NavigationMenu } from "./navigation-menu";
 
 export function Drawer({ children }: React.PropsWithChildren) {

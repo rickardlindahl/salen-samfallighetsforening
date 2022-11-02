@@ -4,7 +4,7 @@ import React from "react";
 import { AvatarDropdown } from "./avatar-dropdown";
 import { NavigationMenu } from "./navigation-menu";
 
-export function Navbar() {
+export default function Navbar() {
   return (
     <div className="navbar w-full bg-transparent">
       <div className="flex-none lg:hidden">
