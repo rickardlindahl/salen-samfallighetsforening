@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "./footer";
 import Navbar from "./navbar";
 import NavigationMenu from "./navigation-menu";
 
@@ -9,6 +10,7 @@ export function Drawer({ children }: React.PropsWithChildren) {
       <div className="drawer-content flex flex-col">
         <Navbar />
         {children}
+        <Footer />
       </div>
       <div className="drawer-side">
         <label htmlFor="drawer" className="drawer-overlay" />

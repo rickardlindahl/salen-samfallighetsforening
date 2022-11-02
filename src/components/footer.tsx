@@ -2,7 +2,7 @@ const supportEmail = "rickard@lindahl.app";
 
 export default function Footer() {
   return (
-    <footer className="footer rounded-lg bg-white p-10">
+    <footer className="footer rounded-lg p-10">
       <div>
         <h4 className="text-base font-bold">Salen samfällighetsförening</h4>
       </div>
