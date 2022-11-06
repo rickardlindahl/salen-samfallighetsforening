@@ -1,20 +1,15 @@
-import { cookies } from "next/headers";
+import { unstable_getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
+import { authOptions } from "../../../pages/api/auth/[...nextauth]";
 import SigninForm from "./signin-form";
 
-export default function SignInPage() {
-  const token = cookies().get("next-auth.session-token");
-  const csrfToken = cookies().get("next-auth.csrf-token");
+export default async function SignInPage() {
+  const session = await unstable_getServerSession(authOptions);
 
-  if (token?.value) {
+  if (session?.user) {
     redirect("/"); // already logged-in
     return;
   }
 
-  if (!csrfToken?.value) {
-    redirect("/"); // no csrf available
-    return;
-  }
-
-  return <SigninForm csrfToken={csrfToken.value} />;
+  return <SigninForm />;
 }

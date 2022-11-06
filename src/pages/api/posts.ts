@@ -1,8 +1,9 @@
 import { Post } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { unstable_getServerSession } from "next-auth/next";
 import { z, ZodError } from "zod";
-import { getSession } from "../../lib/auth/session";
 import { prisma } from "../../server/db/client";
+import { authOptions } from "./auth/[...nextauth]";
 
 const allowedMethods = ["POST"];
 
@@ -16,15 +17,12 @@ export default async function PostsApi(
   res: NextApiResponse<Post | { message: string } | { message: ZodError<{ title: string; body: string }> }>,
 ) {
   try {
-    const session = await getSession(
-      Object.entries(req.cookies).reduce<string>((res, [key, value]) => `${res};${key}=${value}`, ""),
-    );
+    const session = await unstable_getServerSession(authOptions);
     if (!session || !session.user) {
       return res.status(401).send({ message: "Unauthorized" });
     }
 
-    const method = req.method ?? "GARBAGE";
-    if (!allowedMethods.includes(method) || method === "OPTIONS") {
+    if (!req.method || !allowedMethods.includes(req.method) || req.method === "OPTIONS") {
       return res.status(405).send({ message: "Method not allowed." });
     }
 

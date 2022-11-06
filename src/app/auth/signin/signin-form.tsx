@@ -13,7 +13,7 @@ interface LoginFormValues {
   password: string;
 }
 
-export default function SigninForm({ csrfToken }: { csrfToken: string }) {
+export default function SigninForm() {
   const [isSubmitting, setSubmitting] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormValues>();
   const session = useSession();
@@ -45,7 +45,6 @@ export default function SigninForm({ csrfToken }: { csrfToken: string }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("csrfToken")} type="hidden" defaultValue={csrfToken} hidden />
       <div className="form-control">
         <label className="label">
           <span className="label-text">E-post</span>

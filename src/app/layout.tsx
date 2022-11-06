@@ -1,11 +1,11 @@
-import { headers } from "next/headers";
+import { unstable_getServerSession } from "next-auth/next";
 import { Drawer } from "../components/drawer";
 import SessionProvider from "../components/session-provider.client";
-import { getSession } from "../lib/auth/session";
+import { authOptions } from "../pages/api/auth/[...nextauth]";
 import "./styles.css";
 
 export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const session = await getSession(headers().get("cookie") ?? "");
+  const session = await unstable_getServerSession(authOptions);
 
   return (
     <html lang="en" data-theme="lemonade">
