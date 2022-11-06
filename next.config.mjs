@@ -13,6 +13,16 @@ function defineNextConfig(config) {
 }
 
 export default defineNextConfig({
+  experimental: {
+    appDir: true,
+  },
   reactStrictMode: true,
   swcMinify: true,
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
+    // Important: return the modified config
+    config.externals = {
+      argon2: "argon2",
+    };
+    return config;
+  },
 });

@@ -7,6 +7,7 @@ import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
 import { verifyPassword } from "../../../lib/auth/password";
 import { Role } from "../../../types/session";
+import { User } from "@prisma/client";
 // import { Session } from "../../../types/session";
 
 export const authOptions: NextAuthOptions = {
@@ -32,7 +33,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: user.id,
-          role: user.role,
+          role: (user as User).role,
           image: user.image,
         };
       }
@@ -56,7 +57,7 @@ export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
-      id: "app-login",
+      id: "credentials",
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Login",
       // The credentials is used to generate a suitable form on the sign in page.
