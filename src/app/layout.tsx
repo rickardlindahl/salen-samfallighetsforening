@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
+import { env } from "~/lib/env/client";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,7 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      signInUrl={env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
+      signUpUrl={env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
+      afterSignInUrl={env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL}
+      afterSignUpUrl={env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
+    >
       <html lang="en">
         <body className={inter.className}>{children}</body>
       </html>

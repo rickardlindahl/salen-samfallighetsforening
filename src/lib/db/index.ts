@@ -1,7 +1,9 @@
 import { Pool } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 
-const databaseUrl = `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}/${process.env.PGDATABASE}`;
+import { env } from "~/lib/env/server";
+
+const databaseUrl = `postgres://${env.PGUSER}:${env.PGPASSWORD}@${env.PGHOST}/${env.PGDATABASE}`;
 
 const pool = new Pool({ connectionString: databaseUrl });
 
