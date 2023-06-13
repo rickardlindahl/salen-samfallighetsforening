@@ -1,8 +1,14 @@
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  mysqlTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
-export const post = pgTable("post", {
+export const post = mysqlTable("post", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
   body: text("body").notNull(),
   userId: text("user_id").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),

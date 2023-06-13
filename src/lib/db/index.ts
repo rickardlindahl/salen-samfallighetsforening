@@ -1,10 +1,12 @@
-import { Pool } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-serverless";
+import { connect } from "@planetscale/database";
+import { drizzle } from "drizzle-orm/planetscale-serverless";
 
 import { env } from "~/lib/env/server";
 
-const databaseUrl = `postgres://${env.PGUSER}:${env.PGPASSWORD}@${env.PGHOST}/${env.PGDATABASE}`;
+const connection = connect({
+  host: env.DATABASE_HOST,
+  username: env.DATABASE_USERNAME,
+  password: env.DATABASE_PASSWORD,
+});
 
-const pool = new Pool({ connectionString: databaseUrl });
-
-export const db = drizzle(pool);
+export const db = drizzle(connection);
