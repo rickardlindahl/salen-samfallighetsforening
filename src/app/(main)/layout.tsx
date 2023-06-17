@@ -1,26 +1,24 @@
-import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
+import { menuItems } from "~/settings";
+import { Footer } from "./footer";
+import { Header } from "./header";
 
-import { MainNav } from "./main-nav";
-import { SiteFooter } from "./site-footer";
-
-interface MainLayoutProps {
+export default function MainLayout({
+  children,
+}: {
   children: React.ReactNode;
-}
-
-export default async function MainLayout({ children }: MainLayoutProps) {
+}) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="container z-40 bg-background">
-        <div className="flex h-20 items-center justify-between py-6">
-          <MainNav items={[{ title: "Posts", href: "/posts " }]} />
-          <nav>
-            <UserButton />
-          </nav>
+    <>
+      <div className="fixed inset-0 flex justify-center sm:px-8">
+        <div className="flex w-full max-w-7xl lg:px-8">
+          <div className="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20" />
         </div>
-      </header>
-      <main className="flex-1">{children}</main>
-      <SiteFooter />
-    </div>
+      </div>
+      <div className="relative">
+        <Header menuItems={menuItems} />
+        <main>{children}</main>
+        <Footer />
+      </div>
+    </>
   );
 }

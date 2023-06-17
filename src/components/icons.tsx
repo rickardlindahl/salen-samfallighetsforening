@@ -1,18 +1,20 @@
 import {
   AlertTriangle,
+  ArrowDown,
   ArrowRight,
   Check,
   ChevronLeft,
   ChevronRight,
-  Command,
   CreditCard,
   File,
   FileText,
   HelpCircle,
+  Home,
   Image,
   Laptop,
   Loader2,
   LucideProps,
+  Menu,
   Moon,
   MoreVertical,
   Pizza,
@@ -24,12 +26,12 @@ import {
   User,
   X,
   type Icon as LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-export type Icon = LucideIcon
+export type Icon = LucideIcon;
 
 export const Icons = {
-  logo: Command,
+  logo: Home,
   close: X,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
@@ -45,6 +47,7 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowDown: ArrowDown,
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
@@ -69,4 +72,5 @@ export const Icons = {
   ),
   twitter: Twitter,
   check: Check,
-}
+  menu: Menu,
+};

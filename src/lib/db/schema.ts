@@ -1,3 +1,4 @@
+import { InferModel } from "drizzle-orm";
 import {
   mysqlTable,
   serial,
@@ -14,3 +15,5 @@ export const post = mysqlTable("post", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at"),
 });
+
+export type Post = InferModel<typeof post>;
