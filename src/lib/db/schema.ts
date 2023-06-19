@@ -26,3 +26,5 @@ export const user = mysqlTable("user", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at"),
 });
+
+export type NewUser = InferModel<typeof user, "insert">;
