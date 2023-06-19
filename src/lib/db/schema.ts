@@ -40,4 +40,5 @@ export const user = mysqlTable("user", {
   updatedAt: timestamp("updated_at"),
 });
 
+export type User = InferModel<typeof user>;
 export type NewUser = InferModel<typeof user, "insert">;
