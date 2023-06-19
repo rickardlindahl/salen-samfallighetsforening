@@ -17,7 +17,10 @@ async function createUser(newUser: NewUser) {
 async function updateUser(newUser: NewUser) {
   return db
     .update(user)
-    .set({ attributes: newUser.attributes })
+    .set({
+      attributes: newUser.attributes,
+      updatedAt: new Date(),
+    })
     .where(eq(user.externalId, newUser.externalId));
 }
 
