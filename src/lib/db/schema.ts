@@ -1,6 +1,7 @@
 import { InferModel, sql } from "drizzle-orm";
 import {
   json,
+  mysqlEnum,
   mysqlTable,
   serial,
   text,
@@ -21,6 +22,9 @@ export const post = mysqlTable("post", {
 
 export type Post = InferModel<typeof post>;
 
+export const roles = ["admin", "user"] as const;
+export type Role = (typeof roles)[number];
+
 export const user = mysqlTable("user", {
   id: serial("id").primaryKey(),
   externalId: varchar("external_id", { length: 255 }).notNull(),
@@ -29,6 +33,7 @@ export const user = mysqlTable("user", {
   emailAddress: text("email_address").notNull(),
   imageUrl: text("image_url").notNull(),
   attributes: json("attributes").notNull(),
+  role: mysqlEnum("role", roles).default("user").notNull(),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
