@@ -22,23 +22,16 @@ async function updateUser(newUser: NewUser) {
 }
 
 function userJSONtoNewUser(userJSON: UserJSON) {
-  const {
-    id,
-    first_name,
-    last_name,
-    email_addresses,
-    image_url,
-    ...attributes
-  } = userJSON;
+  const { id, ...attributes } = userJSON;
 
   const newUser: NewUser = {
     externalId: id,
-    firstName: first_name,
-    lastName: last_name,
+    firstName: userJSON.first_name,
+    lastName: userJSON.last_name,
     emailAddress: userJSON.email_addresses?.find(
       (emailAddress) => emailAddress.id === userJSON.primary_email_address_id,
     )?.email_address as string,
-    imageUrl: image_url,
+    imageUrl: userJSON.image_url,
     attributes,
   };
 
