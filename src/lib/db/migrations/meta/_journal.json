@@ -8,6 +8,13 @@
       "when": 1686641765317,
       "tag": "0000_living_dragon_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1687158766168,
+      "tag": "0001_classy_the_captain",
+      "breakpoints": true
     }
   ]
 }

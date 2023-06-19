@@ -1,5 +1,6 @@
 import { InferModel } from "drizzle-orm";
 import {
+  json,
   mysqlTable,
   serial,
   text,
@@ -17,3 +18,11 @@ export const post = mysqlTable("post", {
 });
 
 export type Post = InferModel<typeof post>;
+
+export const user = mysqlTable("user", {
+  id: serial("id").primaryKey(),
+  externalId: varchar("external_id", { length: 255 }).notNull(),
+  attributes: json("attributes").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at"),
+});
