@@ -2,6 +2,7 @@ import { IncomingHttpHeaders } from "http";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import type { WebhookEvent } from "@clerk/nextjs/dist/types/server";
+import { UserJSON } from "@clerk/nextjs/dist/types/server";
 import { eq } from "drizzle-orm";
 import { Webhook, WebhookRequiredHeaders } from "svix";
 
@@ -20,6 +21,30 @@ async function updateUser(newUser: NewUser) {
     .where(eq(user.externalId, newUser.externalId));
 }
 
+function userJSONtoNewUser(userJSON: UserJSON) {
+  const {
+    id,
+    first_name,
+    last_name,
+    email_addresses,
+    image_url,
+    ...attributes
+  } = userJSON;
+
+  const newUser: NewUser = {
+    externalId: id,
+    firstName: first_name,
+    lastName: last_name,
+    emailAddress: userJSON.email_addresses?.find(
+      (emailAddress) => emailAddress.id === userJSON.primary_email_address_id,
+    )?.email_address as string,
+    imageUrl: image_url,
+    attributes,
+  };
+
+  return newUser;
+}
+
 async function handler(request: Request) {
   const payload = await request.json();
   const headersList = headers();
@@ -35,25 +60,19 @@ async function handler(request: Request) {
       JSON.stringify(payload),
       heads as IncomingHttpHeaders & WebhookRequiredHeaders,
     ) as WebhookEvent;
-    console.log(evt);
     switch (evt.type) {
       case "user.created": {
-        const { id, ...attributes } = evt.data;
+        await createUser(userJSONtoNewUser(evt.data));
 
-        await createUser({ externalId: id, attributes });
-
-        return NextResponse.json({ message: "User created!" }, { status: 200 });
+        return NextResponse.json({ message: "User created!" }, { status: 201 });
       }
       case "user.updated": {
-        const { id, ...attributes } = evt.data;
-
-        await updateUser({ externalId: id, attributes });
+        await updateUser(userJSONtoNewUser(evt.data));
 
         return NextResponse.json({ message: "User updated!" }, { status: 200 });
       }
     }
   } catch (err) {
-    console.error(err);
     console.error((err as Error).message);
     return NextResponse.json({ message: "Bad request!" }, { status: 400 });
   }
