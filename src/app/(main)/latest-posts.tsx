@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { Card } from "~/components/card";
 import { db } from "~/lib/db";
-import { post } from "~/lib/db/schema";
+import { post, user } from "~/lib/db/schema";
 import { formatDate } from "~/lib/utils";
 
 async function getPosts(numberOfPosts: number) {
@@ -13,8 +13,15 @@ async function getPosts(numberOfPosts: number) {
       title: post.title,
       createdAt: post.createdAt,
       body: post.body,
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emailAddress: user.emailAddress,
+        imageUrl: user.imageUrl,
+      },
     })
     .from(post)
+    .leftJoin(user, eq(post.userId, user.id))
     .limit(numberOfPosts)
     .orderBy(sql`${post.createdAt} desc`);
 }
