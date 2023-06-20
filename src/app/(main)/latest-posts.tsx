@@ -1,36 +1,22 @@
 import Link from "next/link";
+import { sql } from "drizzle-orm";
 
 import { Card } from "~/components/card";
-import { Post } from "~/lib/db/schema";
+import { db } from "~/lib/db";
+import { post } from "~/lib/db/schema";
 import { formatDate } from "~/lib/utils";
 
 async function getPosts(numberOfPosts: number) {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(void 0);
-    }, 500);
-  });
-
-  const posts: Post[] = [
-    {
-      id: 1,
-      title: "First",
-      body: "Text",
-      userId: "1",
-      createdAt: new Date("2023-06-16"),
-      updatedAt: null,
-    },
-    {
-      id: 2,
-      title: "Second",
-      body: "Another text",
-      userId: "1",
-      createdAt: new Date("2023-06-16"),
-      updatedAt: null,
-    },
-  ];
-
-  return posts.slice(0, numberOfPosts);
+  return db
+    .select({
+      id: post.id,
+      title: post.title,
+      createdAt: post.createdAt,
+      body: post.body,
+    })
+    .from(post)
+    .limit(numberOfPosts)
+    .orderBy(sql`${post.createdAt} desc`);
 }
 
 interface LatestPostsProps {
