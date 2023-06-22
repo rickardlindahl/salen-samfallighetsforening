@@ -14,7 +14,7 @@ export const post = mysqlTable("post", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   body: text("body").notNull(),
-  userId: bigint("user_id", { mode: "bigint" }),
+  userId: bigint("user_id", { mode: "bigint" }).notNull(),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
