@@ -43,3 +43,20 @@ export const user = mysqlTable("user", {
 
 export type User = InferModel<typeof user>;
 export type NewUser = InferModel<typeof user, "insert">;
+
+export const document = mysqlTable("document", {
+  id: serial("id").primaryKey(),
+  description: text("description").notNull(),
+  key: text("key").notNull(),
+  name: text("name").notNull(),
+  size: int("size").notNull(),
+  url: text("url").notNull(),
+  userId: int("user_id").notNull(),
+  createdAt: timestamp("created_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: timestamp("updated_at"),
+});
+
+export type Document = InferModel<typeof document>;
+export type NewDocument = InferModel<typeof document, "insert">;
