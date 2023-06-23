@@ -43,6 +43,13 @@
       "when": 1687421653121,
       "tag": "0005_chubby_runaways",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1687495978376,
+      "tag": "0006_fine_moon_knight",
+      "breakpoints": true
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { InferModel, sql } from "drizzle-orm";
 import {
-  bigint,
+  int,
   json,
   mysqlEnum,
   mysqlTable,
@@ -14,7 +14,7 @@ export const post = mysqlTable("post", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   body: text("body").notNull(),
-  userId: bigint("user_id", { mode: "bigint" }).notNull(),
+  userId: int("user_id").notNull(),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
