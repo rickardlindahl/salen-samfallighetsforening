@@ -1,45 +1,30 @@
 import Link from "next/link";
+import { eq, sql } from "drizzle-orm";
+
+import { db } from "~/lib/db";
+import { document, user } from "~/lib/db/schema";
+import { formatDate } from "~/lib/utils";
 
 async function getDocuments(numberOfDocuments: number) {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(void 0);
-    }, 500);
-  });
-
-  const documents: {
-    company: string;
-    title: string;
-    start: string;
-    end: string;
-  }[] = [
-      {
-        company: "Planetaria",
-        title: "CEO",
-        start: "2019",
-        end: "Present",
+  return db
+    .select({
+      description: document.description,
+      id: document.id,
+      name: document.name,
+      size: document.size,
+      url: document.url,
+      user: {
+        id: user.id,
+        imageUrl: user.imageUrl,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
-      {
-        company: "Airbnb",
-        title: "Product Designer",
-        start: "2014",
-        end: "2019",
-      },
-      {
-        company: "Facebook",
-        title: "iOS Software Engineer",
-        start: "2011",
-        end: "2014",
-      },
-      {
-        company: "Starbucks",
-        title: "Shift Supervisor",
-        start: "2008",
-        end: "2011",
-      },
-    ];
-
-  return documents.slice(0, numberOfDocuments);
+      createdAt: document.createdAt,
+    })
+    .from(document)
+    .leftJoin(user, eq(document.userId, user.id))
+    .orderBy(sql`${document.createdAt} desc`)
+    .limit(numberOfDocuments);
 }
 
 interface LatestDocumentsProps {
@@ -49,7 +34,7 @@ interface LatestDocumentsProps {
 export async function LatestDocuments({
   numberOfDocuments,
 }: LatestDocumentsProps) {
-  const resume = await getDocuments(numberOfDocuments);
+  const documents = await getDocuments(numberOfDocuments);
 
   return (
     <div className="space-y-10 lg:pl-16 xl:pl-24">
@@ -58,28 +43,35 @@ export async function LatestDocuments({
           Senaste dokumenten
         </h3>
         <ol className="space-y-4">
-          {resume.map((role, roleIndex) => (
-            <li key={roleIndex} className="flex gap-4">
-              <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0"></div>
-              <dl className="flex flex-auto flex-wrap gap-x-2">
-                <dt className="sr-only">Company</dt>
-                <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  {role.company}
-                </dd>
-                <dt className="sr-only">Role</dt>
-                <dd className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {role.title}
-                </dd>
-                <dt className="sr-only">Date</dt>
-                <dd
-                  className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                  aria-label={`${role.start} until ${role.end}`}
-                >
-                  <time dateTime={role.start}>{role.start}</time>{" "}
-                  <span aria-hidden="true">—</span>{" "}
-                  <time dateTime={role.end}>{role.end}</time>
-                </dd>
-              </dl>
+          {documents.map((doc) => (
+            <li key={doc.id} className="flex gap-4">
+              <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                <img
+                  src={doc.user?.imageUrl}
+                  alt={`${doc.user?.firstName} ${doc.user?.lastName}`}
+                />
+              </div>
+              <a href={doc.url} download>
+                <dl className="flex flex-auto flex-wrap gap-x-2">
+                  <dt className="sr-only">Namn</dt>
+                  <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    {doc.name}
+                  </dd>
+                  <dt className="sr-only">Beskrivning</dt>
+                  <dd className="text-xs text-zinc-500 dark:text-zinc-400">
+                    {doc.description}
+                  </dd>
+                  <dt className="sr-only">Datum</dt>
+                  <dd
+                    className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
+                    aria-label={formatDate(doc.createdAt)}
+                  >
+                    <time dateTime={formatDate(doc.createdAt)}>
+                      {formatDate(doc.createdAt)}
+                    </time>{" "}
+                  </dd>
+                </dl>
+              </a>
             </li>
           ))}
         </ol>
