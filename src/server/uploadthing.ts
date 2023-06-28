@@ -12,7 +12,12 @@ const f = createUploadthing();
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   documentUploader: f({ pdf: { maxFileSize: "4MB" } })
-    .input(z.object({ description: z.string().min(1) }))
+    .input(
+      z.object({
+        description: z.string().min(1),
+        size: z.number().gte(0),
+      }),
+    )
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req, input }) => {
       const { userId } = getAuth(req);
@@ -32,11 +37,14 @@ export const ourFileRouter = {
         throw new Error("Unauthorized");
       }
 
-      return { userId: result[0].id, description: input.description };
+      return {
+        userId: result[0].id,
+        description: input.description,
+        size: input.size,
+      };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-
       const newDocument: NewDocument = {
         ...metadata,
         ...file,
