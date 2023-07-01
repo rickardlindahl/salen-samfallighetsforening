@@ -27,10 +27,10 @@ export default async function IndexPage() {
       </Container>
       <Container className="mt-24 md:mt-28">
         <div className="grid grid-cols-1 gap-y-20 lg:grid-cols-2">
-          <Suspense>
+          <Suspense fallback={<LatestPosts.loader numberOfPosts={3} />}>
             <LatestPosts numberOfPosts={3} />
           </Suspense>
-          <Suspense>
+          <Suspense fallback={<LatestDocuments.loader numberOfDocuments={5} />}>
             <LatestDocuments numberOfDocuments={5} />
           </Suspense>
         </div>
