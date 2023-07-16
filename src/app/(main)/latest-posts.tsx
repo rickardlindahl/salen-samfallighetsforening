@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Card } from "~/components/card";
 import { Skeleton } from "~/components/ui/skeleton";
-import { getPosts } from "~/lib/db/post";
+import { getPosts } from "~/lib/db/queries";
 import { formatDate } from "~/lib/utils";
 
 interface LatestPostsProps {
