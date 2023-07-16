@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 
 import { db } from ".";
-import { post, user } from "./schema";
+import { document, post, user } from "./schema";
 
 export async function getPosts(numberOfPosts: number) {
   return db
@@ -24,3 +24,27 @@ export async function getPosts(numberOfPosts: number) {
 }
 
 export type PostWithUser = Awaited<ReturnType<typeof getPosts>>[number];
+
+export async function getDocuments(numberOfDocuments: number) {
+  return db
+    .select({
+      description: document.description,
+      id: document.id,
+      name: document.name,
+      size: document.size,
+      url: document.url,
+      user: {
+        id: user.id,
+        imageUrl: user.imageUrl,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      createdAt: document.createdAt,
+    })
+    .from(document)
+    .leftJoin(user, eq(document.userId, user.id))
+    .orderBy(sql`${document.createdAt} desc`)
+    .limit(numberOfDocuments);
+}
+
+export type DocumentWithUser = Awaited<ReturnType<typeof getDocuments>>[number];

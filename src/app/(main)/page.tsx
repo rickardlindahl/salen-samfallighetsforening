@@ -38,14 +38,27 @@ export default async function IndexPage() {
               <Suspense fallback={<LatestPosts.loader numberOfPosts={3} />}>
                 <LatestPosts numberOfPosts={3} />
               </Suspense>
-            </div>
-            <div className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500">
-              <Link href="/posts">Se alla inlägg</Link>
+              <div className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500">
+                <Link href="/posts">Se alla inlägg</Link>
+              </div>
             </div>
           </div>
-          <Suspense fallback={<LatestDocuments.loader numberOfDocuments={5} />}>
-            <LatestDocuments numberOfDocuments={5} />
-          </Suspense>
+
+          <div className="space-y-10 lg:pl-16 xl:pl-24">
+            <div className="flex flex-col gap-4 rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
+              <h3 className="text-xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-2xl">
+                Senaste dokumenten
+              </h3>
+              <Suspense
+                fallback={<LatestDocuments.loader numberOfDocuments={5} />}
+              >
+                <LatestDocuments numberOfDocuments={5} />
+              </Suspense>
+              <div className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500">
+                <Link href="/documents">Se alla dokument</Link>
+              </div>
+            </div>
+          </div>
         </div>
       </Container>
     </>
