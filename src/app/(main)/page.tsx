@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 
 import { Container } from "~/components/container";
 import { LatestDocuments } from "./latest-documents";
@@ -27,9 +28,21 @@ export default async function IndexPage() {
       </Container>
       <Container className="mt-24 md:mt-28">
         <div className="grid grid-cols-1 gap-y-20 lg:grid-cols-2">
-          <Suspense fallback={<LatestPosts.loader numberOfPosts={3} />}>
-            <LatestPosts numberOfPosts={3} />
-          </Suspense>
+          <div className="flex flex-col gap-4">
+            <div className="max-w-2xl">
+              <h2 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-3xl">
+                Senaste inläggen
+              </h2>
+            </div>
+            <div className="flex flex-col gap-16">
+              <Suspense fallback={<LatestPosts.loader numberOfPosts={3} />}>
+                <LatestPosts numberOfPosts={3} />
+              </Suspense>
+            </div>
+            <div className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500">
+              <Link href="/posts">Se alla inlägg</Link>
+            </div>
+          </div>
           <Suspense fallback={<LatestDocuments.loader numberOfDocuments={5} />}>
             <LatestDocuments numberOfDocuments={5} />
           </Suspense>
