@@ -1,13 +1,22 @@
 import "./globals.css";
 
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
+import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/lib/env/client";
 import { cn } from "~/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const fontHeading = localFont({
+  src: "../assets/fonts/CalSans-SemiBold.woff2",
+  variable: "--font-heading",
+});
 
 export const metadata = {
   title: "Salen Samfällighetsförening",
@@ -28,10 +37,12 @@ export default function RootLayout({
       afterSignUpUrl={env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
     >
       <html lang="sv" suppressHydrationWarning>
+        <head />
         <body
           className={cn(
-            inter.className,
             "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable,
+            fontHeading.variable,
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

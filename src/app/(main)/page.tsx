@@ -1,66 +1,83 @@
 import { Suspense } from "react";
 import Link from "next/link";
 
-import { Container } from "~/components/container";
+import { Icons } from "~/components/icons";
+import { siteConfig } from "~/settings";
 import { LatestDocuments } from "./latest-documents";
 import { LatestPosts } from "./latest-posts";
 
 export default async function IndexPage() {
   return (
     <>
-      <Container className="mt-9">
-        <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-            Salen Samfällighetsförening
+      <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+        <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+            {siteConfig.name}
           </h1>
-          {[
-            "Salen Samfällighetsförening är en samfällighetsförening baserad på Tomtebo i Umeå. Dess huvudsakliga syfte är att förvalta och underhålla gemensamma områden och tillgångar inom området för att skapa en trivsam miljö för de boende.",
-            "Genom medlemskapet och årliga avgifter kan de boende vara delaktiga i beslut och vara en del av en gemenskap som strävar efter att förbättra boendemiljön på Tomtebo.",
-          ].map((text, index) => (
+          {siteConfig.purpose.map((text, index) => (
             <p
               key={index}
-              className="mt-6 text-base text-zinc-600 dark:text-zinc-400"
+              className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8"
             >
               {text}
             </p>
           ))}
         </div>
-      </Container>
-      <Container className="mt-24 md:mt-28">
-        <div className="grid grid-cols-1 gap-y-20 lg:grid-cols-2">
-          <div className="flex flex-col gap-4">
-            <div className="max-w-2xl">
-              <h2 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-3xl">
-                Senaste inläggen
-              </h2>
-            </div>
-            <div className="flex flex-col gap-16">
-              <Suspense fallback={<LatestPosts.loader numberOfPosts={3} />}>
-                <LatestPosts numberOfPosts={3} />
-              </Suspense>
-              <div className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500">
-                <Link href="/posts">Se alla inlägg</Link>
+      </section>
+
+      <section
+        id="latest"
+        className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-24"
+      >
+        <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
+          <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+            Händelser
+          </h2>
+          <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            Här visas de senaste händelserna från samfällighetsföreningen.
+          </p>
+        </div>
+        <div className="mx-auto grid grid-cols-1 justify-center gap-4 lg:grid-cols-2">
+          <div className="rounded-lg border bg-background p-2">
+            <div className="flex flex-col justify-between rounded-md p-6">
+              <div className="space-y-2">
+                <h3 className="flex flex-row gap-2 font-heading text-2xl font-bold">
+                  <Icons.newspaper />
+                  Senaste inläggen
+                </h3>
+                <Suspense fallback={<LatestPosts.loader numberOfPosts={3} />}>
+                  <LatestPosts numberOfPosts={3} />
+                </Suspense>
+                <div className="flex justify-center">
+                  <Link href="/posts" className="underline">
+                    Se alla inlägg
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="space-y-10 lg:pl-16 xl:pl-24">
-            <div className="flex flex-col gap-4 rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
-              <h3 className="text-xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-2xl">
-                Senaste dokumenten
-              </h3>
-              <Suspense
-                fallback={<LatestDocuments.loader numberOfDocuments={5} />}
-              >
-                <LatestDocuments numberOfDocuments={5} />
-              </Suspense>
-              <div className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500">
-                <Link href="/documents">Se alla dokument</Link>
+          <div className="flex rounded-lg border bg-background p-2">
+            <div className="flex-col justify-between rounded-md p-6">
+              <div className="space-y-2">
+                <h3 className="flex flex-row gap-2 font-heading text-2xl font-bold">
+                  <Icons.file />
+                  Senaste dokumenten
+                </h3>
+                <Suspense
+                  fallback={<LatestDocuments.loader numberOfDocuments={5} />}
+                >
+                  <LatestDocuments numberOfDocuments={5} />
+                </Suspense>
+                <div className="flex justify-center">
+                  <Link href="/documents" className="underline">
+                    Se alla dokument
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </Container>
+      </section>
     </>
   );
 }

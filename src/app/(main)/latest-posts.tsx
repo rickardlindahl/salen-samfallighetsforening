@@ -1,6 +1,3 @@
-import Link from "next/link";
-
-import { Card } from "~/components/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { getPosts } from "~/lib/db/queries";
 import { formatDate } from "~/lib/utils";
@@ -15,17 +12,29 @@ export async function LatestPosts({ numberOfPosts }: LatestPostsProps) {
   return (
     <>
       {posts.map((post) => (
-        <Card key={post.id} as="article">
-          <Card.Title>{post.title}</Card.Title>
-          <Card.Eyebrow
-            as="time"
+        <article
+          key={post.id}
+          className="group relative flex flex-col items-start"
+        >
+          <h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+            {post.title}
+          </h2>
+          <time
+            className="relative z-10 mt-2 flex items-center pl-3.5 text-sm text-zinc-400 dark:text-zinc-500"
             dateTime={post.createdAt.toISOString()}
-            decorate
           >
+            <span
+              className="absolute inset-y-0 left-0 flex items-center"
+              aria-hidden="true"
+            >
+              <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
+            </span>
             {formatDate(post.createdAt)}
-          </Card.Eyebrow>
-          <Card.Description>{post.body}</Card.Description>
-        </Card>
+          </time>
+          <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            {post.body}
+          </p>
+        </article>
       ))}
     </>
   );
@@ -37,17 +46,26 @@ LatestPosts.loader = function LatestPostsLoader({
   return (
     <>
       {Array.apply(null, Array(numberOfPosts)).map((_, index) => (
-        <Card key={index} as="article">
-          <Card.Title>
+        <article
+          key={index}
+          className="group relative flex flex-col items-start"
+        >
+          <h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
             <Skeleton className="h-6 w-[320px]" />
-          </Card.Title>
-          <Card.Eyebrow>
-            <Skeleton className="h-2 w-[180px]" />
-          </Card.Eyebrow>
-          <Card.Description>
+          </h2>
+          <div className="relative z-10 order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500">
+            <Skeleton className="h-4 w-[180px]" />
+          </div>
+          <div className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <Skeleton className="h-4 w-[320px]" />
+          </div>
+          <div className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <Skeleton className="h-4 w-[300px]" />
+          </div>
+          <div className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             <Skeleton className="h-4 w-[240px]" />
-          </Card.Description>
-        </Card>
+          </div>
+        </article>
       ))}
     </>
   );

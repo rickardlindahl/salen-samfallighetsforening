@@ -15,7 +15,3 @@ export function formatDate(date: Date) {
     timeZone: "UTC",
   });
 }
-
-export function isActive(pathname: string, href: string) {
-  return pathname === href;
-}

@@ -1,6 +1,8 @@
-import { menuItems } from "~/settings";
-import { Footer } from "./footer";
-import { Header } from "./header";
+import { UserButton } from "@clerk/nextjs";
+
+import { MainNav } from "~/components/main-nav";
+import { SiteFooter } from "~/components/site-footer";
+import { mainNav } from "~/settings";
 
 export default function MainLayout({
   children,
@@ -8,17 +10,17 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <div className="fixed inset-0 flex justify-center sm:px-8">
-        <div className="flex w-full max-w-7xl lg:px-8">
-          <div className="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20" />
+    <div className="flex min-h-screen flex-col">
+      <header className="container z-40 bg-background">
+        <div className="flex h-20 items-center justify-between py-6">
+          <MainNav items={mainNav} />
+          <nav>
+            <UserButton />
+          </nav>
         </div>
-      </div>
-      <div className="relative">
-        <Header menuItems={menuItems} />
-        <main>{children}</main>
-        <Footer />
-      </div>
-    </>
+      </header>
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
+    </div>
   );
 }
