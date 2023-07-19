@@ -5,11 +5,12 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Command,
   CreditCard,
+  Download,
   File,
   FileText,
   HelpCircle,
-  Home,
   Image,
   Laptop,
   Loader2,
@@ -17,6 +18,7 @@ import {
   Menu,
   Moon,
   MoreVertical,
+  Newspaper,
   Pizza,
   Plus,
   Settings,
@@ -31,7 +33,7 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
-  logo: Home,
+  logo: Command,
   close: X,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
@@ -73,4 +75,7 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   menu: Menu,
+  newspaper: Newspaper,
+  file: File,
+  download: Download,
 };

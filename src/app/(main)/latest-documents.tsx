@@ -1,4 +1,14 @@
+import { Icons } from "~/components/icons";
 import { Skeleton } from "~/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { getDocuments } from "~/lib/db/queries";
 import { formatDate } from "~/lib/utils";
 
@@ -12,37 +22,35 @@ export async function LatestDocuments({
   const documents = await getDocuments(numberOfDocuments);
 
   return (
-    <ol className="space-y-4">
-      {documents.map((doc) => (
-        <li key={doc.id} className="flex gap-4">
-          <div
-            className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full bg-contain shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0"
-            style={{ backgroundImage: `url(${doc.user?.imageUrl})` }}
-          ></div>
-          <a href={doc.url} download>
-            <dl className="flex flex-auto flex-wrap gap-x-2">
-              <dt className="sr-only">Namn</dt>
-              <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                {doc.name}
-              </dd>
-              <dt className="sr-only">Beskrivning</dt>
-              <dd className="text-xs text-zinc-500 dark:text-zinc-400">
-                {doc.description}
-              </dd>
-              <dt className="sr-only">Datum</dt>
-              <dd
-                className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                aria-label={formatDate(doc.createdAt)}
-              >
-                <time dateTime={formatDate(doc.createdAt)}>
-                  {formatDate(doc.createdAt)}
-                </time>{" "}
-              </dd>
-            </dl>
-          </a>
-        </li>
-      ))}
-    </ol>
+    <Table>
+      <TableCaption>
+        En lista över de senast uppladdade dokumenten.
+      </TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Datum</TableHead>
+          <TableHead className="hidden sm:table-cell">Filnamn</TableHead>
+          <TableHead>Beskrivning</TableHead>
+          <TableHead>Ladda ner</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {documents.map((doc) => (
+          <TableRow key={doc.id}>
+            <TableCell>{formatDate(doc.createdAt)}</TableCell>
+            <TableCell className="hidden font-medium sm:table-cell">
+              {doc.name}
+            </TableCell>
+            <TableCell className="font-medium">{doc.description}</TableCell>
+            <TableCell>
+              <a href={doc.url} download target="_blank">
+                <Icons.download />
+              </a>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
 
@@ -50,17 +58,36 @@ LatestDocuments.loader = function LatestDocumentsLoader({
   numberOfDocuments,
 }: LatestDocumentsProps) {
   return (
-    <ol className="space-y-4">
-      {Array.apply(null, Array(numberOfDocuments)).map((_, index) => (
-        <li key={index} className="flex gap-4">
-          <Skeleton className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0" />
-          <dl className="flex flex-auto flex-wrap gap-x-2">
-            <Skeleton className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100" />
-            <Skeleton className="text-xs text-zinc-500 dark:text-zinc-400" />
-            <Skeleton className="ml-auto text-xs text-zinc-400 dark:text-zinc-500" />
-          </dl>
-        </li>
-      ))}
-    </ol>
+    <Table>
+      <TableCaption>
+        En lista över de senaste uppladdade dokumenten.
+      </TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="hidden sm:table-cell">Datum</TableHead>
+          <TableHead>Filnamn</TableHead>
+          <TableHead>Beskrivning</TableHead>
+          <TableHead>Ladda ner</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.apply(null, Array(numberOfDocuments)).map((_, index) => (
+          <TableRow key={index}>
+            <TableCell className="hidden sm:table-cell">
+              <Skeleton className="h-4 w-[20px]" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-4 w-[20px]" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-4 w-[20px]" />
+            </TableCell>
+            <TableCell>
+              <Icons.spinner className="animate-spin" />
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
