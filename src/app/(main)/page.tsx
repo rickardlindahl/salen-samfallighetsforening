@@ -43,7 +43,7 @@ export default async function IndexPage() {
                 Här visas de senaste händelserna från samfällighetsföreningen.
               </p>
             </div>
-            <div className="mx-auto grid grid-cols-1 justify-center gap-4 lg:grid-cols-2">
+            <div className="mx-auto grid grid-cols-1 justify-center gap-4 text-left lg:grid-cols-2">
               <div className="rounded-lg border bg-background p-2">
                 <div className="flex flex-col justify-between rounded-md p-6">
                   <div className="space-y-2">
