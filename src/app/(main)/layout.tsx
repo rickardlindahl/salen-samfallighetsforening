@@ -1,7 +1,9 @@
-import { UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 import { MainNav } from "~/components/main-nav";
 import { SiteFooter } from "~/components/site-footer";
+import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import { mainNav } from "~/settings";
 
 export default function MainLayout({
@@ -13,9 +15,21 @@ export default function MainLayout({
     <div className="flex min-h-screen flex-col">
       <header className="container z-40 bg-background">
         <div className="flex h-20 items-center justify-between py-6">
-          <MainNav items={mainNav} />
+          <MainNav items={mainNav.filter((nav) => !nav.disabled)} />
           <nav>
-            <UserButton />
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              <button
+                className={cn(
+                  buttonVariants({ variant: "secondary", size: "sm" }),
+                  "px-4",
+                )}
+              >
+                <SignInButton>Logga in</SignInButton>
+              </button>
+            </SignedOut>
           </nav>
         </div>
       </header>
